@@ -6,13 +6,14 @@ jobs:
     env:
       str1: string1
       str2: "string2"
+      str3: 'string3'
     steps:
       - run: |
-          echo "${{ env.str1 }}"
-          echo ${{ env.str2 }}
-          echo ${{ '${{ env.str2 }}' }}
-          echo $str2
-          echo "$str2"
-          echo '$str2'
+          echo Double quotes github evaluation: "${{ env.str1 }}"
+          echo Single quote github evaluation: '${{ env.str2 }}'
+          echo Using some tricks to print the literal being evaluates. Note that this will not work without the single quotes: '${{ '${{ env.str2 }}' }}'
+          echo Printing as an environment variable: $str3
+          echo Printing as a double quoted environment variable: "$str2"
+          echo Printing without evaluating, due to the single quotes: '$str2'
           echo Done
         shell: bash
