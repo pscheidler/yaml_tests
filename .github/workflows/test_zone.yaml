@@ -1,0 +1,18 @@
+on: push
+
+jobs:
+  job1:
+    runs-on: ubuntu-slim
+    env:
+      str1: string1
+      str2: "string2"
+    steps:
+      - run: |
+          echo "${{ env.str1 }}"
+          echo ${{ env.str2 }}
+          echo ${{ '${{ env.str2 }}' }}
+          echo $str2
+          echo "$str2"
+          echo '$str2'
+          echo Done
+        shell: bash
