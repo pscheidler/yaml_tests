@@ -7,6 +7,18 @@ jobs:
       str1: string1
       str2: "string2"
       str3: 'string3'
+      true1: true
+      true2: True
+      true3: TRUE
+      true9: TRue
+      true4: "True"
+      true5: "True "
+      true6: "True!"
+      true7: "TRue"
+      true8: "true"
+      array1:
+
+
     steps:
       - run: |
           echo Double quotes github evaluation: "${{ env.str1 }}"
@@ -17,3 +29,41 @@ jobs:
           echo Printing without evaluating, due to the single quotes: '$str2'
           echo Done
         shell: bash
+
+      - run: |
+          echo "Testing True"
+          echo "true1 (set to true): $true1"
+          echo "true2 (set to True): $true2"
+          echo "true3 (set to TRUE): $true3"
+          echo "true4 (set to \"True\"): $true4"
+          echo "true5 (set to \"True \"): $true5"
+          echo "true6 (set to \"True!\"): $true6"
+          echo "true7 (set to \"TRue\"): $true7"
+          echo "true9 (set to TRue): $true9"
+          echo "true1 ($true1) == true2 ($true2)? ${{ (env.true1 == env.true2) && 'Yes' || 'No' }}"
+          echo "true1 ($true1) == true3 ($true3)? ${{ (env.true1 == env.true3) && 'Yes' || 'No' }}"
+          echo "true1 ($true1) == true4 ($true4)? ${{ (env.true1 == env.true4) && 'Yes' || 'No' }}"
+          echo "true1 ($true1) == true5 ($true5)? ${{ (env.true1 == env.true5) && 'Yes' || 'No' }}"
+          echo "true1 ($true1) == true6 ($true6)? ${{ (env.true1 == env.true6) && 'Yes' || 'No' }}"
+          echo "true1 ($true1) == true7 ($true7)? ${{ (env.true1 == env.true7) && 'Yes' || 'No' }}"
+          echo "true1 ($true1) == \"True\"? ${{ (env.true1 == 'True') && 'Yes' || 'No' }}"
+          echo "ABC == abc? ${{ ('ABC' == 'abc') && 'Yes' || 'No' }}"
+          if [[ "$true1" == "$true2" ]]; then
+            echo "t1 = t2"
+          fi
+          if [[ "$true1" == "$true8" ]]; then
+            echo "t1 = t7"
+          fi
+          echo Done
+        shell: bash
+      # A single line string, nothing special here
+      - run: echo "Single line"
+      # The bracket means the newline is replaced with a space
+      - run: >                    
+          echo This appears as
+          a single line
+      # The pipe means this is seen as a multi-line element
+      - run: |
+          echo "This is line one"
+          echo "This is line two"
+
