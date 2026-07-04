@@ -16,7 +16,11 @@ jobs:
       true6: "True!"
       true7: "TRue"
       true8: "true"
-      ${{'test'}}: "Works!"
+      ${{'evaluated_name'}}: "Works!"
+      number1: 1
+      number2: 2e3
+      number3: ${{ 2e3 }}
+      number4: "5e2"
 
     steps:
       - run: |
@@ -27,7 +31,7 @@ jobs:
           echo Printing as a double quoted environment variable: "$str2"
           echo Printing without evaluating, due to the single quotes: '$str2'
           echo Done
-          echo "$test"
+          echo "$evaluated_name"
         shell: bash
 
       - run: |
@@ -67,3 +71,13 @@ jobs:
           echo "This is line one"
           echo "This is line two"
 
+      - run: |
+          echo "Testing Numbers ($number1, $number2, $number3, ${{ env.number4 }})"
+          echo "$number1 < 2? ${{ (env.number1 < 2) && 'Yes' || 'No' }}"
+          echo "$number1 > 2? ${{ (env.number1 > 2) && 'Yes' || 'No' }}"
+          echo "$number2 < 3000? ${{ (env.number2 < 3000) && 'Yes' || 'No' }}"
+          echo "$number2 > 3000? ${{ (env.number2 > 3000) && 'Yes' || 'No' }}"
+          echo "$number3 < 3000? ${{ (env.number3 < 3000) && 'Yes' || 'No' }}"
+          echo "$number3 > 3000? ${{ (env.number3 > 3000) && 'Yes' || 'No' }}"
+          echo "$number4 < 3000? ${{ (env.number4 < 3000) && 'Yes' || 'No' }}"
+          echo "$number4 > 3000? ${{ (env.number4 > 3000) && 'Yes' || 'No' }}"
