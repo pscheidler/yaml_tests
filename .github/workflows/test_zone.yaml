@@ -8,7 +8,7 @@ jobs:
       str2: "string2"
       str3: 'string3'
       true1: true
-      true2: No
+      true2: NO
       true3: TRUE
       true9: TRue
       true4: "True"
