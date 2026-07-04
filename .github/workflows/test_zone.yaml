@@ -16,8 +16,7 @@ jobs:
       true6: "True!"
       true7: "TRue"
       true8: "true"
-      array1:
-
+      ${{'test'}}: "Works!"
 
     steps:
       - run: |
@@ -28,6 +27,7 @@ jobs:
           echo Printing as a double quoted environment variable: "$str2"
           echo Printing without evaluating, due to the single quotes: '$str2'
           echo Done
+          echo "$test"
         shell: bash
 
       - run: |
