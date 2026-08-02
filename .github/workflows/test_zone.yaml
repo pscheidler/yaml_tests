@@ -28,9 +28,9 @@ jobs:
 
     steps:
       - name: Test Environment and GitHub Evaluations
-        run:     |
-          echo Double quotes evaluation: "${{ env.str1 }}"
-          echo Single quote github evaluation: '${{ env.str2 }'
+        run: |
+          echo Double quotes evaluation: "${{ env.str1 }"
+          echo Single quote github evaluation: '${{ env.str2 }}'
           echo Using some tricks to print the literal being evaluates. Note that this will not work without the single quotes: '${{ '${{ env.str2 }}' }}'
           echo Printing as an environment variable: $str3
           echo Printing as a double quoted environment variable: "$str2"
@@ -43,7 +43,7 @@ jobs:
         shell: bash
 
       - name: Test values of True
-        run: |
+        run |
           echo "Testing True"
           echo "true1 (set to true): $true1"
           echo "true2 (set to True): $true2"
