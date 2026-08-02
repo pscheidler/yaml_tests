@@ -24,11 +24,12 @@ jobs:
       number2: 2e3
       number3: ${{ 2e3 }}
       number4: "5e2"
+      number5: "5e3"
 
     steps:
       - name: Test Environment and GitHub Evaluations
         run: |
-          echo Double quotes github evaluation: "${{ env.str1 }"
+          echo Double quotes evaluation: "${{ env.str1 }"
           echo Single quote github evaluation: '${{ env.str2 }}'
           echo Using some tricks to print the literal being evaluates. Note that this will not work without the single quotes: '${{ '${{ env.str2 }}' }}'
           echo Printing as an environment variable: $str3
@@ -92,4 +93,5 @@ jobs:
           echo "$number3 > 3000? ${{ (env.number3 > 3000) && 'Yes' || 'No' }}"
           echo "$number4 < 3000? ${{ (env.number4 < 3000) && 'Yes' || 'No' }}"
           echo "$number4 > 3000? ${{ (env.number4 > 3000) && 'Yes' || 'No' }}"
-          echo "$number1 + 1 = ${{ (env.number1 + 1) }}
+          echo "$number5 > 3000? ${{ (env.number5 > 5000) && 'Yes' || 'No' }}"
+          echo "$number5 > 3000? ${{ (env.number5 > 5000) && 'Yes' || 'No' }}"
