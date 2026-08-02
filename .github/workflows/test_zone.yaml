@@ -43,7 +43,7 @@ jobs:
         shell: bash
 
       - name: Test values of True
-        if: ${{ alway }}
+        if: ${{ always() }}
         run: |
           echo "Testing True"
           echo "true1 (set to true): $true1"
