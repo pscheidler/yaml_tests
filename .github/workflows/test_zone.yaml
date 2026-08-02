@@ -17,6 +17,8 @@ jobs:
       true6: "True!"
       true7: "TRue"
       true8: "true"
+      # Below is a GitHub expression, it will be substituted with the value evaluated_name
+      # before the yaml interpretation happens
       ${{'evaluated_name'}}: "Works!"
       number1: 1
       number2: 2e3
@@ -26,21 +28,21 @@ jobs:
     steps:
       - name: Test Environment and GitHub Evaluations
         run: |
-          echo Double quotes github evaluation: "${{ env.str1 }}"
+          echo Double quotes github evaluation: "${{ env.str1 }"
           echo Single quote github evaluation: '${{ env.str2 }}'
           echo Using some tricks to print the literal being evaluates. Note that this will not work without the single quotes: '${{ '${{ env.str2 }}' }}'
           echo Printing as an environment variable: $str3
           echo Printing as a double quoted environment variable: "$str2"
           echo Printing without evaluating, due to the single quotes: '$str2'
           echo Using an evaluated expression to make an env name $${{env.str}}1
-          echo Testing white space in evaluated expression $$ {{env.str}}1
-          echo Testing white space in evaluated expression $${ {env.str}}1
+          echo Testing white space in evaluated expression (note that bash processes '$$' into the process ID) $$ {{env.str}}1
+          echo Testing white space in evaluated expression (note that bash processes '$$' into the process ID) $${ {env.str}}1
           echo Using an evaluated name="$evaluated_name"
           echo Done
         shell: bash
 
-
-      - run: |
+      - name: Test values of True
+        run: |
           echo "Testing True"
           echo "true1 (set to true): $true1"
           echo "true2 (set to True): $true2"
@@ -66,8 +68,10 @@ jobs:
           fi
           echo Done
         shell: bash
+
       # A single line string, nothing special here
       - run: echo "Single line"
+
       # The bracket means the newline is replaced with a space
       - run: >                    
           echo This appears as
@@ -77,7 +81,8 @@ jobs:
           echo "This is line one"
           echo "This is line two"
 
-      - run: |
+      - name: "Test numeric values and comparisons"
+        run: |
           echo "Testing Numbers ($number1, $number2, $number3, ${{ env.number4 }})"
           echo "$number1 < 2? ${{ (env.number1 < 2) && 'Yes' || 'No' }}"
           echo "$number1 > 2? ${{ (env.number1 > 2) && 'Yes' || 'No' }}"
@@ -87,3 +92,4 @@ jobs:
           echo "$number3 > 3000? ${{ (env.number3 > 3000) && 'Yes' || 'No' }}"
           echo "$number4 < 3000? ${{ (env.number4 < 3000) && 'Yes' || 'No' }}"
           echo "$number4 > 3000? ${{ (env.number4 > 3000) && 'Yes' || 'No' }}"
+          echo "$number1 + 1 = ${{ (env.number1 + 1) }}
