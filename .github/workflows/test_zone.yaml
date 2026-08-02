@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Test Environment and GitHub Evaluations
-        run: |
+        run:     |
           echo Double quotes evaluation: "${{ env.str1 }}"
           echo Single quote github evaluation: '${{ env.str2 }'
           echo Using some tricks to print the literal being evaluates. Note that this will not work without the single quotes: '${{ '${{ env.str2 }}' }}'
