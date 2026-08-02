@@ -19,7 +19,7 @@ jobs:
       true8: "true"
       # Below is a GitHub expression, it will be substituted with the value evaluated_name
       # before the yaml interpretation happens
-      ${{'evaluated_name'}}: "Works!"
+      ${{'evaluated_name'}: "Works!"
       number1: 1
       number2: 2e3
       number3: ${{ 2e3 }}
