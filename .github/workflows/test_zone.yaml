@@ -1,5 +1,3 @@
-on: push
-
 jobs:
   job1:
     runs-on: ubuntu-slim
@@ -96,3 +94,5 @@ jobs:
           echo "$number4 > 3000? ${{ (env.number4 > 3000) && 'Yes' || 'No' }}"
           echo "$number5 < 3000? ${{ (env.number5 < 5000) && 'Yes' || 'No' }}"
           echo "$number5 > 3000? ${{ (env.number5 > 5000) && 'Yes' || 'No' }}"
+
+on: push
