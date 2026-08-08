@@ -23,8 +23,46 @@ jobs:
       number3: ${{ 2e3 }}
       number4: "5e2"
       number5: "5e3"
+      ABC123: "Works!"
 
     steps:
+      - name: Secrets test
+        run: |
+          echo ABC123 and AAABBB should not be visible...
+          echo ${{secrets.SECRET_ABC123}} and ${{secrets.SECRET_AAABBB}} should definitely not be visible!
+          echo SECRET_ABC123 is not really visible, and that is a shame
+          LOCAL_VAR="ABC123"
+          if [ $LOCAL_VAR == "ABC123" ]; then
+            echo Bash literal equality check works
+          else
+            echo Bash literal equality check FAILS
+          fi
+          if [ $LOCAL_VAR == ${{ secrets.SECRET_ABC123 }} ]; then
+            echo Bash secret equality check works
+          else
+            echo Bash secret equality check FAILS
+          fi
+          if [ ${{ secrets.SECRET_AAABBB }} == ${{ secrets.SECRET_ABC123 }} ]; then
+            echo DANGER! Secret 1 has the same comparison value as Secret 2!
+          else
+            echo Bash knows the secrets are different
+          fi
+
+          python -c '
+          print("The full secret: ${{secrets.SECRET_ABC123}}")
+          s="${{secrets.SECRET_ABC123}}"
+          print(f"Letter 1: {s[0]}, full secret: {s}, hidden secret={s[0]} {s[1:]}")
+          if "${{secrets.SECRET_ABC123}}" == "ABC123":
+            print("Equality check works")
+          else:
+            print("Equality check FAILS")
+          import sys
+          if "${{secrets.SECRET_ABC123}}" == sys.argv[1]:
+            print("Equality check with input works")
+          else:
+            print("Equality check with input FAILS")
+          ' ${{ secrets.SECRET_ABC123 }}
+
       - name: Test Environment and GitHub Evaluations
         run: |
           echo Double quotes evaluation: "${{ env.str1 }}"
