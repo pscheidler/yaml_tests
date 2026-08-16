@@ -137,6 +137,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Python Script Output
+        id: pso
         run: |
           echo "Here's the full output:"
           python ./output_test.py
@@ -148,5 +149,20 @@ jobs:
           echo "element2 = $(jq -r '.element2' <<< "$OUTPUT")"
           echo "element3 = $(jq -r '.element3' <<< "$OUTPUT")"
           echo "element4 = $(jq -r '.element4' <<< "$OUTPUT")"
+          echo "JSON_OUT=$OUTPUT" >> $GITHUB_OUTPUT
+
+      - name: Python Script Input
+        run: |
+          echo "raw JSON = $RAW_JSON"
+          echo "element1 = $EL1"
+          echo "element2 = $EL2"
+          echo "element3 = $EL3"
+          echo "element4 = $EL4"
+        env:
+          RAW_JSON: ${{ steps.pso.outputs.JSON_OUT }}
+          EL1: ${{ fromJSON(steps.pso.outputs.JSON_OUT).element1 }}
+          EL2: ${{ fromJSON(steps.pso.outputs.JSON_OUT).element2 }}
+          EL3: ${{ fromJSON(steps.pso.outputs.JSON_OUT).element3 }}
+          EL4: ${{ fromJSON(steps.pso.outputs.JSON_OUT).element4 }}
 
 on: push
