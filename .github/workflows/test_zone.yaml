@@ -145,10 +145,10 @@ jobs:
           echo "Capturing the output:"
           OUTPUT=$(python ./output_test.py)
           echo "Output is $OUTPUT"
-          echo "element1 = $(jq -r '.element1' <<< "$OUTPUT")"
-          echo "element2 = $(jq -r '.element2' <<< "$OUTPUT")"
-          echo "element3 = $(jq -r '.element3' <<< "$OUTPUT")"
-          echo "element4 = $(jq -r '.element4' <<< "$OUTPUT")"
+          if ! jq empty <<< "$OUTPUT"; then
+              echo "Invalid JSON returned by script"
+              exit 1
+          fi
           echo "JSON_OUT=$OUTPUT" >> $GITHUB_OUTPUT
 
       - name: Python Script Input
