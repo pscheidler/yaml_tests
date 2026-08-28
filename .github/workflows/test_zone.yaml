@@ -24,6 +24,7 @@ jobs:
       number4: "5e2"
       number5: "5e3"
       ABC123: "Works!"
+      SCRIPT_PRINT_TARGET: "stderr"
 
     steps:
       - name: Secrets test
@@ -75,8 +76,11 @@ jobs:
           echo Testing white space in evaluated expression '(note that bash processes $$ into the process ID)' $$ {{env.str}}1
           echo Testing white space in evaluated expression '(note that bash processes $$ into the process ID)' $${ {env.str}}1
           echo Using an evaluated name="$evaluated_name"
+          echo TT1 = $TRUE_TEST1
           echo Done
         shell: bash
+        env:
+          TRUE_TEST1: ${{ (env.true1 == env.true2) && 'Yes' || 'No' }}
 
       - name: Test values of True
         if: ${{ always() }}
@@ -114,6 +118,7 @@ jobs:
       - run: >                    
           echo This appears as
           a single line
+          echo '<--' Note how the echo was printed, because it is all the same line!
       # The pipe means this is seen as a multi-line element
       - run: |
           echo "This is line one"
@@ -139,16 +144,15 @@ jobs:
       - name: Python Script Output
         id: pso
         run: |
-          echo "Here's the full output:"
-          python ./output_test.py
-          
-          echo "Capturing the output:"
+          # Generate and capture the script output
           OUTPUT=$(python ./output_test.py)
           echo "Output is $OUTPUT"
+          # Verify that it is proper JSON format
           if ! jq empty <<< "$OUTPUT"; then
               echo "Invalid JSON returned by script"
               exit 1
           fi
+          # Output the, uh, output
           echo "JSON_OUT=$OUTPUT" >> $GITHUB_OUTPUT
 
       - name: Python Script Input
@@ -164,5 +168,14 @@ jobs:
           EL2: ${{ fromJSON(steps.pso.outputs.JSON_OUT).element2 }}
           EL3: ${{ fromJSON(steps.pso.outputs.JSON_OUT).element3 }}
           EL4: ${{ fromJSON(steps.pso.outputs.JSON_OUT).element4 }}
+
+      - name: Inputs to Python
+        shell: python
+        run: |
+          import os          
+          var = os.getenv("EL1")
+          print(f"EL1 = {var}, type= {type(var)}")
+        env:
+          EL1: ${{ steps.pso.outputs.JSON_OUT }}
 
 on: push
